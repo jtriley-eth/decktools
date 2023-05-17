@@ -1,3 +1,7 @@
+//! # Ether Deck Storage Module
+//! 
+//! Contains functions for computing storage slots.
+
 use crate::constants::{AUTH_INDEX, ID_INDEX, SHARD_INDEX, THRESHOLD_INDEX};
 use ethers::{
     abi::{encode, Token},
@@ -5,14 +9,33 @@ use ethers::{
     utils::keccak256,
 };
 
+/// ## ID Slot
+/// 
+/// ### Returns
+/// 
+/// The ID storage slot
 pub fn id_slot() -> U256 {
     U256::from(ID_INDEX)
 }
 
+/// ## Threshold Slot
+/// 
+/// ### Returns
+/// 
+/// The threshold storage slot
 pub fn threshold_slot() -> U256 {
     U256::from(THRESHOLD_INDEX)
 }
 
+/// ## Authorization Slot
+/// 
+/// ### Parameters
+/// 
+/// - `account`: The account associated with the slot.
+/// 
+/// ### Returns
+/// 
+/// The authorization storage slot for the account.
 pub fn auth_slot(account: &Address) -> [u8; 32] {
     keccak256(&encode(&[
         Token::Address(*account),
@@ -20,6 +43,15 @@ pub fn auth_slot(account: &Address) -> [u8; 32] {
     ]))
 }
 
+/// ## Shard Slot
+/// 
+/// ### Parameters
+/// 
+/// - `selector`: The selector associated with the slot.
+/// 
+/// ### Returns
+/// 
+/// The shard storage slot for the selector.
 pub fn shard_slot(selector: &[u8; 4]) -> [u8; 32] {
     keccak256(&encode(&[
         Token::FixedBytes(selector.to_vec()),
