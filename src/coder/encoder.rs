@@ -2,12 +2,30 @@
 //! 
 //! Contains functions for encoding each of the Ether Deck contract's methods
 use crate::{
+    coder::structures::Encoding,
     constants::{SELECTOR_SET_AUTH, SELECTOR_SET_SHARD, SELECTOR_SET_THRESHOLD, SELECTOR_SYSCALL},
     error::Error,
     util::{u256_to_be, u64_to_be},
 };
 use ethers::prelude::{U256, U64, Address, Signature};
 
+pub fn encode(encoding: &Encoding) -> Result<Vec<u8>, Error> {
+    let encoded = match encoding {
+        Encoding::SetAuth(data) => encode_set_auth(data.account(), data.authorized()),
+        Encoding::SetThreshold(data) => encode_set_threshold(data.threshold()),
+        Encoding::SetShard(data) => encode_set_shard(data.selector(), data.shard()),
+        Encoding::Syscall(data) => encode_syscall(
+            data.id(),
+            data.target(),
+            data.value(),
+            data.deadline(),
+            data.payload(),
+            data.signatures(),
+        )?,
+    };
+
+    Ok(encoded)
+}
 
 /// ## Encode setAuth Call
 /// 
