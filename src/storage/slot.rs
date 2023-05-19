@@ -1,7 +1,6 @@
-//! # Ether Deck Storage Module
+//! # Ether Deck Storage Slot Module
 //! 
 //! Contains functions for computing storage slots.
-
 use crate::constants::{AUTH_INDEX, ID_INDEX, SHARD_INDEX, THRESHOLD_INDEX};
 use ethers::{
     abi::{encode, Token},
